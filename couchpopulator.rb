@@ -5,6 +5,12 @@ require 'trollop'
 require 'json/add/rails'
 require 'json/add/core'
 
+require File.join(File.dirname(__FILE__), '/lib/core_ext/object')
+require File.join(File.dirname(__FILE__), '/lib/core_ext/time')
+require File.join(File.dirname(__FILE__), '/lib/core_ext/date')
+require File.join(File.dirname(__FILE__), '/lib/core_ext/string')
+require File.join(File.dirname(__FILE__), '/lib/core_ext/symbol')
+
 # load all "libs"
 Dir.glob(File.join(File.dirname(__FILE__), 'lib/*.rb')).each {|f| require f }
 
