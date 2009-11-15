@@ -8,11 +8,13 @@ module CouchPopulator
 
         # Only check CouchDB-availibilty when needed
         unless command_line_options[:generate_only]
+          Trollop.die :couch, "You need at least to provide the database's name" if command_line_options[:couch].nil?
+
           # Build the full CouchDB database url
-          couch_url = CouchPopulator::CouchHelper.get_full_couchurl(command_line_options[:couch])
+          couch_url = CouchHelper.get_full_couchurl(command_line_options[:couch])
 
           # Check for availabilty of couchdb
-          Trollop.die :couch, "#{couch_url} is not reachable or ressource does not exist" unless CouchPopulator::CouchHelper.couch_available? couch_url
+          Trollop.die :couch, "#{couch_url} is not reachable or ressource does not exist" unless CouchHelper.couch_available?(couch_url)
 
           # create database on demand
           if command_line_options[:create_db]
@@ -33,19 +35,20 @@ module CouchPopulator
         @command_line_options ||= Trollop.options do
           version "v1.0 (c) Sebastian Cohnen, 2009"
           banner <<-BANNER
-          This is a simple, yet powerfull tool to import large numbers of on-the-fly generated documents into CouchDB.
-          It's using concurrency by spawning several curl subprocesses. Documents are generated on-the-fly.
+This is a simple, yet powerfull tool to import large numbers of on-the-fly generated documents into CouchDB.
+It's using concurrency by spawning several curl subprocesses. Documents are generated on-the-fly.
 
-          See http://github.com/tisba/couchpopulator for more information.
+See http://github.com/tisba/couchpopulator for more information.
 
-          Usage:
-          ./couchpopulator [OPTIONS] [executor [EXECUTOR-OPTIONS]]
+Usage:
+./couchpopulator [OPTIONS] [executor [EXECUTOR-OPTIONS]]
 
-          To see, what options for 'executor' are:
-          ./couchpopulator executor -h
+To see, what options for 'executor' are:
+./couchpopulator executor -h
 
+OPTIONS:
           BANNER
-          opt :couch, "URL of CouchDB Server. You can also provide the name of the target DB only, http://localhost:5984/ will be prepended automatically", :default => ""
+          opt :couch, "URL of CouchDB Server. You can also provide the name of the target DB only, http://localhost:5984/ will be prepended automatically", :type => String
           opt :create_db, "Create DB if needed.", :default => false
           opt :generator, "Name of the generator-class to use", :default => "Example"
           opt :generate_only, "Generate the docs, but don't write to couch and stdout them instead", :default => false
