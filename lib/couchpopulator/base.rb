@@ -8,7 +8,7 @@ module CouchPopulator
 
     def populate
       @opts[:logger] ||= @logger
-      
+
       @opts[:database] ||= database
       @opts[:executor_klass].new(@opts).execute
     end
@@ -16,7 +16,7 @@ module CouchPopulator
     def log(message)
       @logger.log(message)
     end
-    
+
     def database
       URI.parse(@opts[:couch_url]).path unless @opts[:couch_url].nil?
     end
