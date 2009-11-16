@@ -1,10 +1,10 @@
 module Executors
   class Standard
     def initialize(opts={})
-      @opts = opts.merge(troll_options)
+      @opts = opts.merge(command_line_options)
     end
 
-    def troll_options
+    def command_line_options
       help = StringIO.new
 
       opts = Trollop.options do
