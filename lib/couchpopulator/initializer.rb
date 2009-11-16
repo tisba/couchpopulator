@@ -19,7 +19,7 @@ module CouchPopulator
           # create database on demand
           if command_line_options[:create_db]
             # TODO needs to be implemented properly
-            # CouchPopulator::CouchHelper.create_db(command_line_options[:couch]) 
+            # CouchPopulator::CouchHelper.create_db(command_line_options[:couch])
           else
             CouchPopulator::CouchHelper.database_exists? couch_url
           end
@@ -27,10 +27,10 @@ module CouchPopulator
 
         # Initialize CouchPopulator
         options = ({:executor_klass => executor, :generator_klass => generator, :logger => CouchPopulator::Logger.new(command_line_options[:logfile])}).merge(command_line_options)
-        CouchPopulator::Base.new(command_line_options[:couch], options).populate
+        CouchPopulator::Base.new(options).populate
       end
 
-      # Define some command-line options 
+      # Define some command-line options
       def command_line_options
         @command_line_options ||= Trollop.options do
           version "v0.1 (c) Sebastian Cohnen, 2009"
@@ -56,7 +56,7 @@ OPTIONS:
           stop_on_unknown
         end
       end
-      
+
       # Get the requested generator or die
       def generator
         retried = false
@@ -72,7 +72,7 @@ OPTIONS:
             generator_klass
         end
       end
-      
+
       # Get the exexcutor (defaults to standard) or die
       def executor
         retried = false
