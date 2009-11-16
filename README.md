@@ -15,7 +15,7 @@ This project is in a very early state. I'm sure it has some serious bugs and it'
 
 # Getting Started
 
-## Gem
+## Installation
 
     sudo gem install couchpopulator
 
@@ -27,8 +27,13 @@ This project is in a very early state. I'm sure it has some serious bugs and it'
     rake build
       
 ## Getting help
+CouchPopulator tries to give good help on command line options by using:
 
     couchpopulator --help
+    
+To get command line options to a specific execution engine, simply use:
+
+    couchpopulator [EXECUTOR] --help
 
 ## Custom Generators
 Custom generators only need to implement one method. Have a look:
@@ -48,14 +53,15 @@ generate(count) should return an array of documents. Each document should be an 
 
 
 ## Custom Execution Engines
-Custom execute engines need to implement two methods `troll_options` and `execute`. See `executors/standard.rb` for an example.
+Custom execute engines need to implement two methods `command_line_options` and `execute`. See `executors/standard.rb` for an example.
 
 
 # TODO
+- Add support for using a configuration YAML
 - Find out the best strategies for inserting docs to CouchDB and provide execution engines for different approches
 - Implement some more features, like dumping-options for generated documents or load dumped JSON docs to CouchDB
 - Think about a test suite and implement it
-- hunting bugs, make it cleaner, make a gem, ...
+- hunting bugs, make it cleaner
 
 
 
