@@ -10,7 +10,7 @@ module Executors
       opts = Trollop.options do
         version "StandardExecutor v0.1 (c) Sebastian Cohnen, 2009"
         banner <<-BANNER
-        This is the StandardExecutor
+This is the StandardExecutor
         BANNER
         opt :docs_per_chunk, "Number of docs per chunk", :default => 2000
         opt :concurrent_inserts, "Number of concurrent inserts", :default => 5
