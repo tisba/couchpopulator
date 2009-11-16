@@ -59,33 +59,35 @@ OPTIONS:
       
       # Get the requested generator or die
       def generator
+        retried = false
         @generator ||= begin
-          begin
-            require File.join(File.dirname(__FILE__), "../../generators/#{command_line_options[:generator]}.rb")
+            generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("generators/#{command_line_options[:generator]}")
           rescue Exception => e
-            Trollop.die :generator, "Generator #{command_line_options[:generator]} not found!"
-          end
-          generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("generators/#{command_line_options[:generator]}") rescue generator_klass = nil
-          Trollop.die :generator, "Generator must be set, a valid class-name and respond to generate(n)" if generator_klass.nil? || generator_klass.methods.member?(:generate)
-
-          generator_klass
+            begin
+              require File.join(File.dirname(__FILE__), "../../generators/#{command_line_options[:generator]}.rb")
+            rescue NameError, LoadError; end # just catch, do nothing
+            retry if (retried = !retried)
+          ensure
+            Trollop.die :generator, "Generator must be set, a valid class-name and respond to generate(n)" if generator_klass.nil?
+            generator_klass
         end
       end
       
       # Get the exexcutor (defaults to standard) or die
       def executor
+        retried = false
         @executor ||= begin
-          executor_cmd = ARGV.shift || "standard"
-          begin
-            require File.join(File.dirname(__FILE__), "../../executors/#{executor_cmd}.rb")
+            executor_cmd ||= ARGV.shift || "standard"
+            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("executors/#{executor_cmd}") rescue executor_klass = nil
           rescue Exception => e
-            Trollop.die "Executor #{executor_cmd} not found!"
+            begin
+              require File.join(File.dirname(__FILE__), "../../executors/#{executor_cmd}.rb")
+            rescue NameError, LoadError; end # just catch, do nothing
+            retry if (retried = !retried)
+          ensure
+            Trollop.die "Executor must be set and a valid class-name" if executor_klass.nil?
+            executor_klass
           end
-          executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("executors/#{executor_cmd}") rescue executor_klass = nil
-          Trollop.die "Executor must be set and a valid class-name" if executor_klass.nil?
-          
-          executor_klass
-        end
       end
     end
   end
