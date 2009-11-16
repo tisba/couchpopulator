@@ -8,7 +8,7 @@ module Executors
       help = StringIO.new
 
       opts = Trollop.options do
-        version "StandardExecutor v1.0 (c) Sebastian Cohnen, 2009"
+        version "StandardExecutor v0.1 (c) Sebastian Cohnen, 2009"
         banner <<-BANNER
         This is the StandardExecutor
         BANNER

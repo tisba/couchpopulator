@@ -33,7 +33,7 @@ module CouchPopulator
       # Define some command-line options 
       def command_line_options
         @command_line_options ||= Trollop.options do
-          version "v1.0 (c) Sebastian Cohnen, 2009"
+          version "v0.1 (c) Sebastian Cohnen, 2009"
           banner <<-BANNER
 This is a simple, yet powerfull tool to import large numbers of on-the-fly generated documents into CouchDB.
 It's using concurrency by spawning several curl subprocesses. Documents are generated on-the-fly.
