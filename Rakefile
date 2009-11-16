@@ -18,8 +18,14 @@ begin
                     FileList['bin/*']
 
     gemspec.has_rdoc = false
+
+    gemspec.executables = 'couchpopulator'
     
-    gemspec.add_dependency('json', '>=2.0')
+    gemspec.require_paths << 'lib'
+    gemspec.require_paths << 'generators'
+    gemspec.require_paths << 'executors'
+    
+    gemspec.add_dependency('json', '>=1.2.0')
     gemspec.add_dependency('trollop', '>=1.15')
   end
   Jeweler::GemcutterTasks.new

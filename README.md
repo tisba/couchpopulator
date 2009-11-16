@@ -13,14 +13,22 @@ This project is in a very early state. I'm sure it has some serious bugs and it'
 *"there is tool xy already doing that"* - I don't care (okay, thats not true, I care and I'm always eager to see how others implement stuff). I know that there are some tools providing dumping/loading support for CouchDB. But none is written in ruby and non satisfied my needs (e.g. dynamically generating documents). Nevertheless I wanted to learn how you can write such a tool and get more familiar with CouchDB.
 
 
-# Getting Started / Usage
-I'll keep it short for now, sorry...
+# Getting Started
+
+## Gem
+
+    sudo gem install couchpopulator
+
+## Building the gem yourself
 
     sudo gem install json trollops
     git clone git@github.com:tisba/couchpopulator.git
     cd couchpopulator
-    ./couchpopulator --help
+    rake build
+      
+## Getting help
 
+    couchpopulator --help
 
 ## Custom Generators
 Custom generators only need to implement one method. Have a look:

@@ -1,4 +1,4 @@
 #! /usr/bin/ruby
-require File.join(File.dirname(__FILE__), 'lib/couchpopulator.rb')
+require 'couchpopulator'
 
 CouchPopulator::Initializer.run

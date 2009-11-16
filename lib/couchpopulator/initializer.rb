@@ -62,10 +62,10 @@ OPTIONS:
         retried = false
         @generator ||= begin
             generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("generators/#{command_line_options[:generator]}")
-          rescue Exception => e
+          rescue NameError
             begin
               require File.join(File.dirname(__FILE__), "../../generators/#{command_line_options[:generator]}.rb")
-            rescue NameError, LoadError; end # just catch, do nothing
+            rescue LoadError; end # just catch, do nothing
             retry if (retried = !retried)
           ensure
             Trollop.die :generator, "Generator must be set, a valid class-name and respond to generate(n)" if generator_klass.nil?
@@ -78,8 +78,8 @@ OPTIONS:
         retried = false
         @executor ||= begin
             executor_cmd ||= ARGV.shift || "standard"
-            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("executors/#{executor_cmd}") rescue executor_klass = nil
-          rescue Exception => e
+            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("executors/#{executor_cmd}")
+          rescue NameError
             begin
               require File.join(File.dirname(__FILE__), "../../executors/#{executor_cmd}.rb")
             rescue NameError, LoadError; end # just catch, do nothing
