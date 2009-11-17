@@ -7,6 +7,7 @@ module CouchPopulator
 
       def self.defaults
         @defaults ||= {
+          :logger => CouchPopulator::Logger.new,
           :docs_per_chunk => 1000,
           :concurrent_inserts => 5,
           :rounds => 1
