@@ -57,9 +57,32 @@ generate(count) should return an array of documents. Each document should be an 
 ## Custom Execution Engines
 Custom execute engines need to implement two methods `command_line_options` and `execute`. See `executors/standard.rb` for an example.
 
+# Using the CouchPopulator API
+This is the very first version of the CouchPopulator API (introduced in v0.2.0). The interface is still very ugly and will change significantly in the future.
+
+The options for `CouchPopulator::Base`'s initializer are the same as the command line options. No rules without exceptions:
+
+* `:logger` needs to be set to a instance of `CouchPopulator::Logger`
+* `:generator_klass` needs to be set to the generator constant `CouchPopulator::Initializer.generator()` tries to load it
+* `:executor_klass` needs to be set to the generator constant `CouchPopulator::Initializer.executor()` tries to load it
+
+Example:
+
+    require 'rubygems'
+    require 'couchpopulator'
+
+    options = { :logger => CouchPopulator::Logger.new,
+                :generator_klass => CouchPopulator::Initializer.generator('example'),
+                :executor_klass => CouchPopulator::Initializer.executor('standard'),
+                :couch => 'http://localhost:5984/test',
+                :docs_per_chunk => 1,
+                :rounds => 1,
+                :concurrent_inserts => 1 }
+
+    CouchPopulator::Base.new(options).populate
 
 # TODO
-- Add an API
+- make the API suck less
 - Add support for using a configuration YAML
 - Find out the best strategies for inserting docs to CouchDB and provide execution engines for different approches
 - Implement some more features, like dumping-options for generated documents or load dumped JSON docs to CouchDB

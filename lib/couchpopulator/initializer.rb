@@ -25,8 +25,22 @@ module CouchPopulator
           end
         end
 
+        # Get the generator_klass and executor_klass
+        generator_klass = begin
+          generator(command_line_options[:generator])
+        rescue CouchPopulator::GeneratorNotFound
+          Trollop.die :generator, "Generator must be set, a valid class-name and respond to generate(n)"
+        end
+
+        executor_klass = begin
+          executor(executor(ARGV.shift || "standard"))
+        rescue CouchPopulator::ExecutorNotFound
+          Trollop.die "Executor must be set and a valid class-name"
+        end
+
+
         # Initialize CouchPopulator
-        options = ({:executor_klass => executor, :generator_klass => generator, :logger => CouchPopulator::Logger.new(command_line_options[:logfile])}).merge(command_line_options)
+        options = ({:executor_klass => executor_klass, :generator_klass => generator_klass, :logger => CouchPopulator::Logger.new(command_line_options[:logfile])}).merge(command_line_options)
         CouchPopulator::Base.new(options, true).populate
       end
 
@@ -57,35 +71,34 @@ OPTIONS:
         end
       end
 
-      # Get the requested generator or die
-      def generator
+      # Get the requested generator constant or die
+      def generator(generator)
         retried = false
         @generator ||= begin
-            generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/generators/#{command_line_options[:generator]}")
+            generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/generators/#{generator}")
           rescue NameError
             begin
-              require File.join(File.dirname(__FILE__), "../../generators/#{command_line_options[:generator]}.rb")
+              require File.join(File.dirname(__FILE__), "../../generators/#{generator}.rb")
             rescue LoadError; end # just catch, do nothing
             retry if (retried = !retried)
           ensure
-            Trollop.die :generator, "Generator must be set, a valid class-name and respond to generate(n)" if generator_klass.nil?
+            raise CouchPopulator::GeneratorNotFound if generator_klass.nil?
             generator_klass
         end
       end
 
-      # Get the exexcutor (defaults to standard) or die
-      def executor
+      # Get the exexcutor constant (defaults to standard) or die
+      def executor(executor)
         retried = false
         @executor ||= begin
-            executor_cmd ||= ARGV.shift || "standard"
-            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/executors/#{executor_cmd}")
+            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/executors/#{executor}")
           rescue NameError
             begin
-              require File.join(File.dirname(__FILE__), "../../executors/#{executor_cmd}.rb")
+              require File.join(File.dirname(__FILE__), "../../executors/#{executor}.rb")
             rescue NameError, LoadError; end # just catch, do nothing
             retry if (retried = !retried)
           ensure
-            Trollop.die "Executor must be set and a valid class-name" if executor_klass.nil?
+            raise CouchPopulator::ExecutorNotFound if executor_klass.nil?
             executor_klass
           end
       end

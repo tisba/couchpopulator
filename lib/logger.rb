@@ -1,6 +1,6 @@
 module CouchPopulator
   class Logger
-    def initialize(logfile)
+    def initialize(logfile='')
       @out = logfile.empty? ? $stdout : File.new(logfile, "a")
     end
 

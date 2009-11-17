@@ -11,4 +11,13 @@ module CouchPopulator
       @options[:executor_klass].new(@options).execute
     end
   end
+
+  class CouchPopulatorError < StandardError
+  end
+
+  class GeneratorNotFound < CouchPopulatorError
+  end
+
+  class ExecutorNotFound < CouchPopulatorError
+  end
 end
