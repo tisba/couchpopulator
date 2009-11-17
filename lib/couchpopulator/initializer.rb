@@ -61,7 +61,7 @@ OPTIONS:
       def generator
         retried = false
         @generator ||= begin
-            generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("generators/#{command_line_options[:generator]}")
+            generator_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/generators/#{command_line_options[:generator]}")
           rescue NameError
             begin
               require File.join(File.dirname(__FILE__), "../../generators/#{command_line_options[:generator]}.rb")
@@ -78,7 +78,7 @@ OPTIONS:
         retried = false
         @executor ||= begin
             executor_cmd ||= ARGV.shift || "standard"
-            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("executors/#{executor_cmd}")
+            executor_klass = CouchPopulator::MiscHelper.camelize_and_constantize("couch_populator/executors/#{executor_cmd}")
           rescue NameError
             begin
               require File.join(File.dirname(__FILE__), "../../executors/#{executor_cmd}.rb")
