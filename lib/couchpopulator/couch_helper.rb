@@ -5,6 +5,10 @@ module CouchPopulator
         arg.match(/^https?:\/\//) ? arg : URI.join('http://127.0.0.1:5984/', arg).to_s
       end
       
+      def get_database_from_couchurl(url)
+        URI.parse(url).path
+      end
+
       def couch_available? (couch_url)
         # TODO this uri-thing is ugly :/
         tmp = URI.parse(couch_url)
