@@ -27,7 +27,7 @@ module CouchPopulator
 
         # Initialize CouchPopulator
         options = ({:executor_klass => executor, :generator_klass => generator, :logger => CouchPopulator::Logger.new(command_line_options[:logfile])}).merge(command_line_options)
-        CouchPopulator::Base.new(options).populate
+        CouchPopulator::Base.new(options, true).populate
       end
 
       # Define some command-line options

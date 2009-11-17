@@ -1,2 +1,4 @@
 #! /usr/bin/ruby
 require 'couchpopulator'
+
+CouchPopulator::Initializer.run

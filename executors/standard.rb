@@ -2,21 +2,30 @@ module CouchPopulator
   module Executors
     class Standard
       def initialize(opts={})
-        @opts = opts.merge(command_line_options)
+        @options = self.class.defaults.merge(opts)
       end
 
-      def command_line_options
+      def self.defaults
+        @defaults ||= {
+          :docs_per_chunk => 1000,
+          :concurrent_inserts => 5,
+          :rounds => 1
+        }
+      end
+
+      def self.command_line_options
         help = StringIO.new
+
+        defaults = self.defaults
 
         opts = Trollop.options do
           version "StandardExecutor v0.1 (c) Sebastian Cohnen, 2009"
           banner <<-BANNER
   This is the StandardExecutor
           BANNER
-          opt :docs_per_chunk, "Number of docs per chunk", :default => 2000
-          opt :concurrent_inserts, "Number of concurrent inserts", :default => 5
-          opt :rounds, "Number of rounds", :default => 2
-          opt :preflight, "Generate the docs, but don't write to couch. Use with ", :default => false
+          opt :docs_per_chunk, "Number of docs per chunk", :default => defaults[:docs_per_chunk]
+          opt :concurrent_inserts, "Number of concurrent inserts", :default => defaults[:concurrent_inserts]
+          opt :rounds, "Number of rounds", :default => defaults[:rounds]
           opt :help, "Show this message"
 
           educate(help)
@@ -31,17 +40,17 @@ module CouchPopulator
       end
 
       def execute
-        rounds = @opts[:rounds]
-        docs_per_chunk = @opts[:docs_per_chunk]
-        concurrent_inserts = @opts[:concurrent_inserts]
-        generator = @opts[:generator_klass]  
+        rounds = @options[:rounds]
+        docs_per_chunk = @options[:docs_per_chunk]
+        concurrent_inserts = @options[:concurrent_inserts]
+        generator = @options[:generator_klass]
 
-        log = @opts[:logger]
+        log = @options[:logger]
         log << "CouchPopulator's default execution engine has been started."
         log << "Using #{generator.to_s} for generating the documents."
 
         total_docs = docs_per_chunk * concurrent_inserts * rounds
-        log << "Going to insert #{total_docs} generated docs into #{@opts[:couch_url]}"
+        log << "Going to insert #{total_docs} generated docs into #{@options[:couch_url]}"
         log << "Using #{rounds} rounds of #{concurrent_inserts} concurrent inserts with #{docs_per_chunk} docs each"
 
         start_time = Time.now
@@ -53,8 +62,8 @@ module CouchPopulator
               # generate payload for bulk_doc
               payload = JSON.generate({"docs" => generator.generate(docs_per_chunk)})
 
-              unless @opts[:generate_only]
-                result = CurlAdapter::Invoker.new(@opts[:couch_url]).post(payload)
+              unless @options[:generate_only]
+                result = CurlAdapter::Invoker.new(@options[:couch_url]).post(payload)
               else
                 log << "Generated chunk..."
                 puts payload
@@ -67,7 +76,7 @@ module CouchPopulator
         end_time = Time.now
         duration = end_time - start_time
 
-        log << "Execution time: #{duration}s, #{@opts[:generate_only] ? "generated" : "inserted"} #{total_docs}"
+        log << "Execution time: #{duration}s, #{@options[:generate_only] ? "generated" : "inserted"} #{total_docs}"
       end
     end
   end
