@@ -11,3 +11,5 @@ require File.join(File.dirname(__FILE__), 'generator.rb')
 require File.join(File.dirname(__FILE__), 'logger.rb')
 
 Dir.glob(File.join(File.dirname(__FILE__), 'couchpopulator/*.rb')).each {|f| require f }
+
+CouchPopulator::Initializer.run
