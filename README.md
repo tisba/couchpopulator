@@ -64,7 +64,7 @@ The options for `CouchPopulator::Base`'s initializer are the same as the command
 
 * `:logger` needs to be set to a instance of `CouchPopulator::Logger`
 * `:generator_klass` needs to be set to the generator constant `CouchPopulator::Initializer.generator()` tries to load it
-* `:executor_klass` needs to be set to the generator constant `CouchPopulator::Initializer.executor()` tries to load it
+* `:executor_klass` needs to be set to the executor constant `CouchPopulator::Initializer.executor()` tries to load it
 
 Example:
 
