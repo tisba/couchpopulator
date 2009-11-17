@@ -66,7 +66,7 @@ This is the StandardExecutor
       end_time = Time.now
       duration = end_time - start_time
       
-      log << "Execution time: #{duration}s, inserted #{total_docs}"
+      log << "Execution time: #{duration}s, #{@opts[:generate_only] ? "generated" : "inserted"} #{total_docs}"
     end
   end
 end
