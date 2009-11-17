@@ -38,12 +38,14 @@ To get command line options to a specific execution engine, simply use:
 ## Custom Generators
 Custom generators only need to implement one method. Have a look:
 
-    module Generators
-      class Example
-        class << self
-          def generate(count)
-            # ...heavy generating action goes here...
-            # return array of hashes (documents)
+    module CouchPopulator
+      module Generators
+        class Example
+          class << self
+            def generate(count)
+              # ...heavy generating action goes here...
+              # return array of hashes (documents)
+            end
           end
         end
       end
@@ -57,6 +59,7 @@ Custom execute engines need to implement two methods `command_line_options` and 
 
 
 # TODO
+- Add an API
 - Add support for using a configuration YAML
 - Find out the best strategies for inserting docs to CouchDB and provide execution engines for different approches
 - Implement some more features, like dumping-options for generated documents or load dumped JSON docs to CouchDB
