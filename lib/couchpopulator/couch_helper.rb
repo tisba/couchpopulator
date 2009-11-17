@@ -1,6 +1,4 @@
 module CouchPopulator
-  # Borrowed from Rails
-  # http://github.com/rails/rails/blob/ea0e41d8fa5a132a2d2771e9785833b7663203ac/activesupport/lib/active_support/inflector.rb#L355
   class CouchHelper
     class << self
       def get_full_couchurl(arg)

@@ -1,3 +1,4 @@
+# TODO this "thing" realy sucks, make it better! :)
 class CurlAdapter
   class Response
     attr_reader :http_response_code
@@ -29,8 +30,3 @@ class CurlAdapter
     end
   end
 end
-
-# TODO:
-# Keep-Alive mit curl? wäre geil...
-
-

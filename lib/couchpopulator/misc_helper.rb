@@ -6,6 +6,8 @@ module CouchPopulator
          constantize(camelize(lower_case_and_underscored_word))
       end
 
+      # Borrowed from Rails
+      # http://github.com/rails/rails/blob/ea0e41d8fa5a132a2d2771e9785833b7663203ac/activesupport/lib/active_support/inflector.rb#L355
       def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
         if first_letter_in_uppercase
           lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
